@@ -8,9 +8,11 @@ from st_aggrid import AgGrid, GridUpdateMode, GridOptionsBuilder
 import base64
 import folium
 import io
+import os
 import pandas as pd
 import seaborn as sns
 import streamlit as st
+from pathlib import Path
 
 
 def main():
@@ -29,9 +31,13 @@ def main():
 def page_settings():
     st.title("90 days chalenge")
 
-    def fetch_and_clean_data1(file):
-        df = pd.read_csv(file, index_col=[0])
+    def fetch_and_clean_data1(file_):
+        # df = pd.read_csv(file)
+        current_directory = Path(__file__).parent
+        file = open(os.path.join(current_directory, file_), 'rb')
+        df = pd.read_csv(file)
         return df
+
     df_exercises = fetch_and_clean_data1('exercises.csv')
     today = st.sidebar.date_input("Date", date.today())
     df_exer_html = df_exercises[df_exercises["Date"]
