@@ -2,17 +2,8 @@ import pandas as pd
 import streamlit as st
 from datetime import date
 import matplotlib.pyplot as plt
-# Import Libs
-from folium.plugins import FastMarkerCluster
-from st_aggrid import AgGrid, GridUpdateMode, GridOptionsBuilder
-import base64
-import folium
-import io
-import os
-import pandas as pd
-import seaborn as sns
-import streamlit as st
 from pathlib import Path
+import os
 
 
 def main():
@@ -32,14 +23,16 @@ def page_settings():
     st.title("90 days chalenge")
 
     def fetch_and_clean_data1(file_):
-        # df = pd.read_csv(file)
         current_directory = Path(__file__).parent
         file = open(os.path.join(current_directory, file_), 'rb')
         df = pd.read_csv(file)
         return df
 
     df_exercises = fetch_and_clean_data1('exercises.csv')
-    today = st.sidebar.date_input("Date", date.today())
+    today = st.sidebar.date_input("Date", date.today())  # st.sidebar.
+    st.sidebar.markdown(
+        "[Source](https://www.muscleandfitness.com/routine/workouts/workout-routines/reform-90-day-transformation-program-every-man/)")
+
     df_exer_html = df_exercises[df_exercises["Date"]
                                 == today.strftime("%Y-%m-%d")]
     try:
@@ -57,24 +50,23 @@ def page_settings():
         st.text(" \n")
         st.text(" \n")
         st.title("The 3000 Calorie diet meal plan")
-        df_nutrition = fetch_and_clean_data1('food.csv')
+        df_nutrition = fetch_and_clean_data1('food2.csv')
         df_by_day = df_nutrition[df_nutrition["day"] == int(days)]
         labels = ["Calories", "Carbs", "Fat", "Protein", "Fiber"]
         nutri_values = df_by_day[labels].sum(axis=0)
-
         fig1, ax1 = plt.subplots()
         Colours = ["#fd7e14", "#ffc107", "#20c997", "#6f42c1", "#28a745"]
         ax1.pie(nutri_values, labels=labels, autopct="%1.1f%%",
                 startangle=90, colors=Colours)
         ax1.axis("equal")
-        df_by_day["Meal"] = "<a href=" + \
-            df_by_day["receita"]+">"+df_by_day["meal"]+"</a>"
-        tt = df_by_day[["type_meal", "Meal"] +
-                       labels].reset_index(drop=True).to_html(escape=False)
-        row1, row2 = st.columns([2, 1])
+        tt = df_by_day[["type_meal", "Meal", "Portion"] +
+                       labels].reset_index(drop=True)
+        tt = tt.to_html(escape=False)  # , col_space=5)
+        total_cal = df_by_day["Calories"].sum()
+        st.write(f"This plan contains {total_cal} calories")
+        row1, row2 = st.columns([3, 1])
         row1.write(tt, unsafe_allow_html=True)
         row2.pyplot(fig1)
-        row2.text(df_by_day["Calories"].sum())
 
     except:
         minimo = df_exercises["Date"].min()
