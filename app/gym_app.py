@@ -44,7 +44,7 @@ def page_settings():
             "Exercise",
             "Sets",
             "Reps",
-            "obs"
+            "obs",
         ]].reset_index(drop=True).to_html(escape=False)
         st.write(df_exer_html, unsafe_allow_html=True)
         st.text(" \n")
@@ -64,6 +64,7 @@ def page_settings():
         tt = tt.to_html(escape=False)  # , col_space=5)
         total_cal = df_by_day["Calories"].sum()
         st.write(f"This plan contains {total_cal} calories")
+
         row1, row2 = st.columns([3, 1])
         row1.write(tt, unsafe_allow_html=True)
         row2.pyplot(fig1)
