@@ -4,6 +4,7 @@ from datetime import date
 import matplotlib.pyplot as plt
 from pathlib import Path
 import os
+from streamlit import caching
 
 
 def main():
@@ -72,7 +73,20 @@ def page_settings():
     except:
         minimo = df_exercises["Date"].min()
         maximo = df_exercises["Date"].max()
-        st.write(f"You should look between {minimo} and {maximo}.")
+        st.info(f"You should be looking between {minimo} and {maximo}.")
+
+    @st.cache(allow_output_mutation=True)
+    def get_data():
+        return []
+    user_id = st.text_input("User ID")
+    foo = st.slider("foo", 0, 100)
+    bar = st.slider("bar", 0, 100)
+    if st.button("Add row"):
+        get_data().append({"UserID": user_id, "foo": foo, "bar": bar})
+    st.write(pd.DataFrame(get_data()))
+
+    # if st.button("Clear history cache"):
+    #     get_data().clear()
 
 
 if __name__ == "__main__":
