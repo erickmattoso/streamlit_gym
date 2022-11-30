@@ -88,14 +88,36 @@ def page_settings():
     ax1.pie(nutri_values, labels=labels, autopct="%1.1f%%",
             startangle=90, colors=Colours)
     ax1.axis("equal")
-    tt = df_by_day[["type_meal", "Meal", "Portion"] +
-                    labels].reset_index(drop=True)
-    tt = tt.to_html(escape=False)
+    tts = df_by_day[["type_meal", "Meal", "Calories"]].reset_index(drop=True)
+    tt = tts.to_html(escape=False)
     total_cal = df_by_day["Calories"].sum()
     st.write(f"This plan contains {total_cal} calories")
     row1, row2 = st.columns([3, 1])
     row1.write(tt, unsafe_allow_html=True)
     row2.pyplot(fig1)
+
+
+    # cols = st.columns((1, 1, 1, 1, 1, 1, 1, 1))
+    # cols[0].subheader("type_meal")
+    # cols[1].subheader("Meal")
+    # cols[2].subheader("Portion")
+    # cols[3].subheader("Calories")
+    # cols[4].subheader("Carbs")
+    # cols[5].subheader("Fat")
+    # cols[6].subheader("Protein")
+    # cols[7].subheader("Fiber")
+    # repeat = len(tts)
+    # for i in range(repeat):
+    #     cols = st.columns((1, 1, 1, 1, 1, 1, 1, 1))
+    #     cols[0].write(str(tts["type_meal"].values[i]))
+    #     cols[1].write(str(tts["Meal"].values[i]))
+    #     cols[2].write(str(tts["Portion"].values[i]))
+    #     cols[3].write(str(tts["Calories"].values[i]))
+    #     cols[4].write(str(tts["Carbs"].values[i]))
+    #     cols[5].write(str(tts["Fat"].values[i]))
+    #     cols[6].write(str(tts["Protein"].values[i]))
+    #     cols[7].write(str(tts["Fiber"].values[i]))
+
 
 if __name__ == "__main__":
     main()
