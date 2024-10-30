@@ -1,10 +1,8 @@
 import pandas as pd
 import streamlit as st
-from datetime import date
 import matplotlib.pyplot as plt
 from pathlib import Path
 import os
-from streamlit import caching
 
 def main():
     st.set_page_config(layout="wide")
@@ -25,7 +23,6 @@ def page_settings():
         df = pd.read_csv(file)
         return df
 
-    @st.cache(allow_output_mutation=True)
     def get_data():
         return []
 
